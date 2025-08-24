@@ -1,29 +1,18 @@
-/*
-/// Module: sui_move_nft
-module sui_move_nft::sui_move_nft;
-*/
-
-
-module functionexample:: sui_move_nft {
+module functionexample::sui_move_nft {
     use sui::url::{Self, Url};
     use std::string;
     use sui::event;
     use sui::package;
     use sui::display;
 
-    /// SUIGHANA_NFT is a struct that represents a unique SUIGHANA NFT.
-    public struct SUIGHANA_NFT has drop {}
-
-    /// SuiGhana_nft is a struct that represents an NFT object in the Sui blockchain.
-    public struct SuiGhana_nft has key, store {
+    /// sui_move_nft is a struct that represents an NFT object in the Sui blockchain.
+    public struct sui_move_nft has key, store {
         /// The unique identifier of the NFT.
         id: object::UID,
         /// The name of the NFT.
         name: string::String, 
         /// A short description of the NFT.
         description: string::String,
-       // /// The URL of the NFT.
-       // url: Url,
         /// The URL of the image associated with the NFT.
         image_url: Url,
     }
@@ -38,21 +27,20 @@ module functionexample:: sui_move_nft {
         name: string::String,
     }
 
-     /// Initializes the SUIGHANA NFT.
-     ///
-     /// This function initializes the SUIGHANA NFT by creating a new package and publishing it to the sender.
-     /// It also creates a new display object and publishes it to the sender.
-     ///
-     /// Args:
-     /// * `witness`: A SUIGHANA NFT.
-     /// * `ctx`: The transaction context.
-     fun init(witness: SUIGHANA_NFT, ctx: &mut TxContext) {
+    /// Initializes the sui_move_nft.
+    ///
+    /// This function initializes the sui_move_nft by creating a new package and publishing it to the sender.
+    /// It also creates a new display object and publishes it to the sender.
+    ///
+    /// Args:
+    /// * `witness`: A sui_move_nft.
+    /// * `ctx`: The transaction context.
+    fun init(witness: sui_move_nft, ctx: &mut TxContext) {
         let publisher = package::claim(witness, ctx);
 
         let keys = vector[
             string::utf8(b"name"),
             string::utf8(b"description"),
-          //  string::utf8(b"url"),
             string::utf8(b"image_url"),
             string::utf8(b"creator")
         ];
@@ -60,12 +48,11 @@ module functionexample:: sui_move_nft {
         let values = vector[
             string::utf8(b"{name}"),
             string::utf8(b"{description}"),
-           // string::utf8(b"{url}"),
             string::utf8(b"{image_url}"),
-            string::utf8(b"SuiGhana")
+            string::utf8(b"sui_move_nft")
         ];
 
-        let mut display = display::new_with_fields<SuiGhana_nft>(
+        let mut display = display::new_with_fields<sui_move_nft>(
             &publisher, 
             keys,
             values,
@@ -85,20 +72,18 @@ module functionexample:: sui_move_nft {
     /// Args:
     /// * `name`: The name of the NFT.
     /// * `description`: A short description of the NFT.
-    /// * `url`: The URL of the image associated with the NFT.
+    /// * `image_url`: The URL of the image associated with the NFT.
     /// * `ctx`: The transaction context.
     public entry fun mint(
         name: vector<u8>,
         description: vector<u8>,
-       // url: vector<u8>,
         image_url: vector<u8>,
         ctx: &mut tx_context::TxContext,
     ) {
-        let nft = SuiGhana_nft {
+        let nft = sui_move_nft {
             id: object::new(ctx),
             name: string::utf8(name),
             description: string::utf8(description),
-          //  url: url::new_unsafe_from_bytes(url),
             image_url: url::new_unsafe_from_bytes(image_url),
         };
 
@@ -119,7 +104,7 @@ module functionexample:: sui_move_nft {
     /// * `nft`: The NFT object to be updated.
     /// * `new_description`: The new description of the NFT.
     public entry fun update_description(
-        nft: &mut SuiGhana_nft,
+        nft: &mut sui_move_nft,
         new_description: vector<u8>,
     ) {
         nft.description = string::utf8(new_description);
@@ -129,8 +114,7 @@ module functionexample:: sui_move_nft {
     ///
     /// Args:
     /// * `nft`: The NFT object to be burned.
-    public entry fun burn(nft: SuiGhana_nft) {
-        let SuiGhana_nft { id, name: _, description: _,  image_url: _ } = nft;
+    public entry fun burn(nft: sui_move_nft) {
+        let sui_move_nft { id, name: _, description: _,  image_url: _ } = nft;
         object::delete(id);
     }
-}
